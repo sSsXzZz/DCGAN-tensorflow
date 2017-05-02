@@ -23,8 +23,8 @@ if "concat_v2" in dir(tf):
   def concat(tensors, axis, *args, **kwargs):
     return tf.concat_v2(tensors, axis, *args, **kwargs)
 else:
-  def concat(tensors, axis, *args, **kwargs):
-    return tf.concat(tensors, axis, *args, **kwargs)
+  def concat(axis, tensors, *args, **kwargs):
+    return tf.concat(axis, tensors,  *args, **kwargs)
 
 class batch_norm(object):
   def __init__(self, epsilon=1e-5, momentum = 0.9, name="batch_norm"):

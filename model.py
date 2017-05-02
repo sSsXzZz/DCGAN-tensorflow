@@ -10,6 +10,7 @@ from six.moves import xrange
 from ops import *
 from utils import *
 
+LAMBDA = 10
 def conv_out_size_same(size, stride):
   return int(math.ceil(float(size) / float(stride)))
 
@@ -138,6 +139,22 @@ class DCGAN(object):
     self.d_loss_fake_sum = scalar_summary("d_loss_fake", self.d_loss_fake)
                           
     self.d_loss = self.d_loss_real + self.d_loss_fake
+
+    alpha = tf.random_uniform(
+        shape=[28,1], 
+        minval=0.,
+        maxval=1.
+    )
+
+    real_data = self.inputs
+    fake_data = self.G
+    differences = fake_data - real_data
+    interpolates = real_data + (alpha*differences)
+    _, disc = self.discriminator(interpolates, self.y, reuse=True)
+    gradients = tf.gradients(disc, [interpolates])[0]
+    slopes = tf.sqrt(tf.reduce_sum(tf.square(gradients), reduction_indices=[1]))
+    gradient_penalty = tf.reduce_mean((slopes-1.)**2)
+    self.d_loss += LAMBDA*gradient_penalty
 
     self.g_loss_sum = scalar_summary("g_loss", self.g_loss)
     self.d_loss_sum = scalar_summary("d_loss", self.d_loss)

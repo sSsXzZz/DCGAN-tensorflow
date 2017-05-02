@@ -25,7 +25,7 @@ Tensorflow implementation of [Deep Convolutional Generative Adversarial Networks
 - (Optional) [Align&Cropped Images.zip](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html) : Large-scale CelebFaces Dataset
 
 
-## Usage
+## Usagels
 
 First, download dataset with:
 
